@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+
+# Xcode
+build/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+*.xcscmblueprint
+*.xccheckout
+*.moved-aside
+
+# Swift Package Manager
+.swiftpm/
+.build/
+Packages/
+Package.resolved
+
+# CocoaPods / Carthage (au cas où)
+Pods/
+Carthage/Build/
+
+# IDE
+.idea/
+.vscode/
+
+# XcodeGen output
+MeetingMeter.xcodeproj/
+Info.plist
+MeetingMeterCore-Info.plist
