@@ -93,10 +93,10 @@ Si **aucun titre ne matche** mais que Teams a plusieurs fenêtres dont une avec 
 ## 5. Capture + OCR
 
 **Capture :**
-- `ScreenCaptureKit` (macOS 12.3+, cible 13+ OK).
+- `ScreenCaptureKit`, cible macOS 14+ pour utiliser `SCScreenshotManager`.
 - `SCContentFilter(desktopIndependentWindow: scWindow)` pour capturer uniquement la fenêtre Teams, pas le fond d'écran.
-- `SCStreamConfiguration` : `pixelFormat = kCVPixelFormatType_32BGRA`, `queueDepth = 3`.
-- Fréquence : 1 Hz pilotée côté MeetingSession, pas en streaming — on demande une frame ponctuelle à chaque tick via `SCScreenshotManager.captureImage(contentFilter:configuration:)` (macOS 14+ API) ou l'équivalent macOS 13 (`SCStream` avec stop immédiat).
+- `SCStreamConfiguration` : `pixelFormat = kCVPixelFormatType_32BGRA`.
+- Fréquence : 1 Hz pilotée côté MeetingSession, pas en streaming — on demande une frame ponctuelle à chaque tick via `SCScreenshotManager.captureImage(contentFilter:configuration:) async throws -> CGImage`.
 
 **Crop :**
 Sur l'image capturée, on crop la bande supérieure (top 25 % de hauteur) où se trouve en général la toolbar Teams (bouton People/Participants). Réduit le volume OCR de 75 %.
@@ -227,8 +227,8 @@ Les deux sont séquentiels, bouton "Revérifier" sur chaque.
 
 ## 12. Packaging
 
-Identique à DofusSwitch :
-- Target macOS 13+
+Identique à DofusSwitch, mais target macOS 14+ (requis pour `SCScreenshotManager`) :
+- Target macOS 14+ (Sonoma)
 - LSUIElement = true (pas de Dock icon)
 - Hardened runtime OFF (incompat ad-hoc en dev), Manual signing avec identity `-`
 - XcodeGen pour générer `.xcodeproj`
