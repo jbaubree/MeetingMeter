@@ -1,0 +1,72 @@
+name: MeetingMeter
+options:
+  bundleIdPrefix: com.jbaubree
+  deploymentTarget:
+    macOS: "14.0"
+  createIntermediateGroups: true
+settings:
+  base:
+    SWIFT_VERSION: "5.9"
+    MACOSX_DEPLOYMENT_TARGET: "14.0"
+    ENABLE_HARDENED_RUNTIME: NO
+    CODE_SIGN_STYLE: Manual
+    CODE_SIGN_IDENTITY: "-"
+    DEVELOPMENT_TEAM: ""
+targets:
+  MeetingMeterCore:
+    type: framework
+    platform: macOS
+    sources:
+      - Sources/MeetingMeterCore
+    info:
+      path: MeetingMeterCore-Info.plist
+      properties:
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jbaubree.MeetingMeterCore
+        SKIP_INSTALL: YES
+        DEFINES_MODULE: YES
+  MeetingMeter:
+    type: application
+    platform: macOS
+    sources:
+      - Sources/MeetingMeter
+    info:
+      path: Info.plist
+      properties:
+        LSUIElement: true
+        NSHumanReadableCopyright: ""
+        CFBundleShortVersionString: "0.1.0"
+        CFBundleVersion: "1"
+        NSCameraUsageDescription: ""
+        NSMicrophoneUsageDescription: ""
+    dependencies:
+      - target: MeetingMeterCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jbaubree.MeetingMeter
+  MeetingMeterCoreTests:
+    type: bundle.unit-test
+    platform: macOS
+    sources:
+      - Tests/MeetingMeterCoreTests
+    dependencies:
+      - target: MeetingMeterCore
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.jbaubree.MeetingMeterCoreTests
+        GENERATE_INFOPLIST_FILE: YES
+schemes:
+  MeetingMeter:
+    build:
+      targets:
+        MeetingMeter: all
+        MeetingMeterCore: all
+    run:
+      config: Debug
+    test:
+      config: Debug
+      targets:
+        - MeetingMeterCoreTests
