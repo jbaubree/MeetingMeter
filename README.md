@@ -29,7 +29,13 @@ open ~/Library/Developer/Xcode/DerivedData/MeetingMeter-*/Build/Products/Debug/M
 
 Signature ad-hoc : au premier lancement, clic droit → **Ouvrir** → **Ouvrir** dans la confirmation Gatekeeper.
 
-Si une permission ne tient plus après un rebuild :
+### Permissions qui sautent après chaque rebuild
+
+**Symptôme :** l'app affiche "Autorisations requises" alors que tu as déjà cliqué sur les toggles dans Réglages Système.
+
+**Cause :** la signature ad-hoc change à chaque `xcodebuild`. macOS stocke les permissions TCC par signature (pas par bundle id seul), donc après un rebuild l'ancienne entrée ne match plus la nouvelle binaire. Résultat : le toggle est ON dans Réglages Système mais l'app voit `isTrusted = false`.
+
+**Fix** (à relancer après chaque rebuild) :
 
 ```bash
 pkill -f MeetingMeter
@@ -37,6 +43,10 @@ tccutil reset Accessibility com.jbaubree.MeetingMeter
 tccutil reset ScreenCapture com.jbaubree.MeetingMeter
 open ~/Library/Developer/Xcode/DerivedData/MeetingMeter-*/Build/Products/Debug/MeetingMeter.app
 ```
+
+Puis re-coche les 2 permissions dans Réglages Système → Confidentialité et sécurité.
+
+**Solution pérenne (optionnelle) :** signer avec un vrai **Developer ID** au lieu d'ad-hoc. La signature devient stable entre rebuilds et les permissions TCC tiennent. Nécessite un abonnement Apple Developer (99 €/an) et un cert `Developer ID Application`. Modifier dans `project.yml` : `CODE_SIGN_IDENTITY: "Developer ID Application"` + `DEVELOPMENT_TEAM: <ton team id>`.
 
 ## Utilisation
 
