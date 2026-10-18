@@ -106,6 +106,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
     private func onTick() {
         guard case .inMeeting = session.state else { return }
         session.tick(interval: 1)
+        // Fallback: Teams doesn't display a participant counter when alone in the meeting.
+        // After 10s without an OCR hit, assume 1 participant (yourself) so the counter starts ticking.
+        if session.lastKnownCount == nil && session.elapsedSeconds >= 10 {
+            session.updateParticipantCount(1)
+        }
         updateMenuBarLabel()
         runOCRIfIdle()
     }
@@ -116,7 +121,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate, ObservableObject {
         Task { [weak self] in
             defer { Task { @MainActor in self?.ocrInFlight = false } }
             do {
-                let image = try await self?.capture.captureTopBand(for: m.pid)
+                let image = try await self?.capture.captureWindow(for: m.pid)
                 guard let image else { return }
                 let count = try await self?.ocr.recognizeParticipantCount(from: image)
                 if let count, count > 0 {

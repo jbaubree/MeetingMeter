@@ -12,8 +12,9 @@ public final class OCRService {
 
     public func recognizeParticipantCount(from image: CGImage) async throws -> Int? {
         let request = VNRecognizeTextRequest()
-        request.recognitionLevel = .fast
-        request.usesLanguageCorrection = false
+        request.recognitionLevel = .accurate
+        request.usesLanguageCorrection = true
+        request.recognitionLanguages = ["fr-FR", "en-US", "de-DE", "es-ES"]
         let handler = VNImageRequestHandler(cgImage: image, options: [:])
         do {
             try handler.perform([request])

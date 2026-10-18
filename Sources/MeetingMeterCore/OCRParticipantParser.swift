@@ -1,23 +1,37 @@
 import Foundation
 
 public enum OCRParticipantParser {
+    /// Keywords (case-insensitive) that identify a participant counter in OCR text.
+    /// Includes Teams' "People panel" header labels like "Dans l'appel (N)".
     private static let keywords: [String] = [
         "participants",
         "participant",
         "people",
         "personnes",
         "teilnehmer",
-        "personas"
+        "personas",
+        "l'appel",         // Teams FR: "Dans l'appel (N)"
+        "this call",       // Teams EN: "In this call (N)"
+        "this meeting",    // Teams EN variant
+        "in call",         // Teams EN compact
+        "besprechung",     // Teams DE: "In dieser Besprechung (N)"
+        "esta llamada",    // Teams ES: "En esta llamada (N)"
+        "esta reunión"     // Teams ES variant
     ]
 
     public static func parseCount(from text: String) -> Int? {
-        let joined = text.lowercased()
+        // Normalize: lowercase + replace parens and separators with spaces so digit extraction treats
+        // "Dans l'appel (1)" the same as "Dans l'appel 1".
+        var joined = text.lowercased()
+        for ch in ["(", ")", "[", "]", "·", "•", ":", "-", "—", "–"] {
+            joined = joined.replacingOccurrences(of: ch, with: " ")
+        }
         for keyword in keywords {
             guard let keywordRange = joined.range(of: keyword) else { continue }
-            if let digits = extractDigitsBackward(in: joined, before: keywordRange.lowerBound) {
+            if let digits = extractDigitsForward(in: joined, after: keywordRange.upperBound) {
                 return digits
             }
-            if let digits = extractDigitsForward(in: joined, after: keywordRange.upperBound) {
+            if let digits = extractDigitsBackward(in: joined, before: keywordRange.lowerBound) {
                 return digits
             }
         }
