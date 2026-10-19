@@ -19,5 +19,5 @@ public struct Preferences: Codable, Equatable {
         self.currencySymbol = try c.decodeIfPresent(String.self, forKey: .currencySymbol) ?? "€"
     }
 
-    public static let defaults = Preferences(dailyRate: 500, workDayHours: 8, currencySymbol: "€")
+    public static let defaults = Preferences(dailyRate: 650, workDayHours: 8, currencySymbol: "€")
 }

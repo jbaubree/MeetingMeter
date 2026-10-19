@@ -7,7 +7,7 @@ Compteur en direct du coût d'une réunion Microsoft Teams, affiché dans la bar
 - Détection automatique d'une fenêtre Teams en meeting (multilingue : EN/FR/DE/ES)
 - Capture + OCR de la fenêtre à 1 Hz pour extraire le compteur de participants
 - Compteur de coût ticking (1 Hz) dans la barre de menus
-- Taux journalier, heures de travail et devise configurables (défauts : 500 €, 8 h, €)
+- Taux journalier, heures de travail et devise configurables (défauts : 650 €, 8 h, €)
 - Notification macOS à la fin de la réunion avec le total
 - Historique des réunions passées persisté
 - Zéro réseau, zéro télémétrie

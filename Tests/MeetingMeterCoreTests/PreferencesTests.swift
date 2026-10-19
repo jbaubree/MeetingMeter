@@ -11,7 +11,7 @@ final class PreferencesTests: XCTestCase {
     func test_load_returnsDefaultsWhenEmpty() {
         let (store, _) = makeStore()
         let prefs = store.load()
-        XCTAssertEqual(prefs.dailyRate, 500)
+        XCTAssertEqual(prefs.dailyRate, 650)
         XCTAssertEqual(prefs.workDayHours, 8)
         XCTAssertEqual(prefs.currencySymbol, "€")
     }

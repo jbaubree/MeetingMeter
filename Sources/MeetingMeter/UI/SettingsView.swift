@@ -14,7 +14,7 @@ struct SettingsView: View {
             HStack {
                 Text("Taux journalier")
                 Spacer()
-                TextField("500", value: $dailyRate, format: .number)
+                TextField("650", value: $dailyRate, format: .number)
                     .textFieldStyle(.roundedBorder)
                     .frame(width: 80)
                     .multilineTextAlignment(.trailing)
